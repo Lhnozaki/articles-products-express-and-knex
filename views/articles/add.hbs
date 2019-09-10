@@ -1,0 +1,25 @@
+<h3>Add</h3>
+<form action="/articles/fetch" method="POST">
+  <div class="row">
+    <div class="twelve columns">
+      <label>Title</label>
+      <input class="u-full-width" type="text" placeholder="Title" name="title">
+      <label>Author</label>
+      <input class="u-full-width" type="text" placeholder="Author" name="author">
+      <label>Body</label>
+      <textarea class="u-full-width" placeholder="..." name="body"></textarea>
+    </div>
+  </div>
+
+  <input class="button" type="submit" value="Submit">
+</form>
+<div id="errorMsg">
+  {{error}}
+</div>
+<br>
+<div>
+  <p>
+    Use the form above to create and add a new article to the articles catalogue. Don't forget to be creative and have
+    fun!
+  </p>
+</div>

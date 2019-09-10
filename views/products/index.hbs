@@ -1,0 +1,29 @@
+<div>
+  <h3>Products</h3>
+  <div id="linkContainer">
+    <a class="button three columns" href="/products/search">SEARCH</a>
+    <a class="button three columns" href="/products/new">ADD</a>
+    <a class="button three columns" href="/products/edit">EDIT</a>
+    <a class="button three columns" href="/products/delete">DELETE</a>
+  </div>
+  <table class="u-full-width">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Inventory</th>
+        <th>ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products}}
+      <tr>
+        <td>{{name}}</td>
+        <td>${{price}}</td>
+        <td>{{inventory}}</td>
+        <td>{{id}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

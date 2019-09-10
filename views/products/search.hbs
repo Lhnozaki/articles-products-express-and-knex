@@ -1,0 +1,26 @@
+<h3>Search</h3>
+
+<form action="/products/fetch" method="GET">
+  <div class="twelve columns">
+    <label for="IDsearch">Search</label>
+    <input class="u-full-width" type="number" placeholder="Search by product ID" id="IDSearch" name="id">
+  </div>
+  <input class="button" type="submit" value="Submit">
+</form>
+
+<div>
+  <p id="errorMsg">{{error}}</p>
+</div>
+
+<div>
+  <p>
+    Use the search bar above to search for a specific product by ID.
+  </p>
+  <p>
+    Or type in the url localhost:8080/products/[id]
+    and replace [id] with the product ID you want to search with.
+  </p>
+  <p>
+    Try it out!
+  </p>
+</div>

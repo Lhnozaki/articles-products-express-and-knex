@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(to bottom right, pink, rgb(94, 0, 94));
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 100vh;
+  padding: 10px;
+  a,
+  button,
+  input {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    color: purple;
+    font-size: 1.2rem;
+  }
+
+  h1 {
+    font-weight: 500;
+    color: rgb(87, 0, 87);
+    font-size: 6rem;
+  }
+
+  h2,
+  h3,
+  p {
+    color: rgb(116, 113, 113);
+  }
+
+  #errorMsg {
+    color: red;
+  }
+
+  #success {
+    color: green;
+  }
+
+  h2 {
+    text-align: center;
+    color: palevioletred;
+  }
+
+  th,
+  label,
+  h6 {
+    color: purple;
+  }
+}
+
+#container {
+  border: 1px solid white;
+  padding: 60px;
+  margin: 7px auto;
+  max-width: 700px;
+  height: 95vh;
+  overflow: auto;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+  background: rgb(250, 250, 250);
+  border-radius: 15px;
+  #title {
+    text-align: center;
+  }
+
+  .button {
+    background: white;
+    border: 1px solid white;
+    color: purple;
+    &:hover {
+      background: pink;
+      border: 1px solid pink;
+      transition: 0.2s;
+    }
+  }
+
+  .button-primary {
+    background-color: rgb(164, 62, 164);
+    border: 1px solid rgb(164, 62, 164);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    color: white;
+    &:hover {
+      background-color: rgb(85, 1, 85);
+      border: 1px solid rgb(85, 1, 85);
+      color: pink;
+      transition: 0.2s;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}

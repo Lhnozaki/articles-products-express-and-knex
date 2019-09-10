@@ -1,0 +1,23 @@
+<div>
+  <h3>Results</h3>
+  <table class="u-full-width">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Inventory</th>
+        <th>ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products}}
+      <tr>
+        <td>{{name}}</td>
+        <td>${{price}}</td>
+        <td>{{inventory}}</td>
+        <td>{{id}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,26 @@
+<h3>Delete</h3>
+
+<form action="/products/delete/?_method=DELETE" method="POST">
+  <div class="twelve columns">
+    <label for="IDsearch">Delete by ID</label>
+    <input class="u-full-width" type="number" placeholder="Delete by product ID" name="id">
+  </div>
+  <input class="button" type="submit" value="Delete">
+</form>
+
+<div id="errorMsg">
+  {{error}}
+</div>
+<div id="success">
+  {{success}}
+</div>
+<br>
+<div>
+  <p>
+    Use the input field above to delete a specific product by ID. Then hit Submit.
+  </p>
+
+  <p>
+    Try it out!
+  </p>
+</div>
