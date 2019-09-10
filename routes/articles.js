@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const articles = require("../db/articles");
+const knex = require("../database/index");
 articles.getUriTitle();
 
 let error = "";

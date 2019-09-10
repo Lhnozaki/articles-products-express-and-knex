@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const products = require("../db/products");
+const knex = require("../database/index");
 
 let error = "";
 let success = "";
