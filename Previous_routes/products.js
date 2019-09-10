@@ -130,16 +130,8 @@ router.post("/new", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  knex
-    .select("*")
-    .from("products")
-    .then(results => {
-      let goods = { products: results };
-      res.render("products/index", goods);
-    })
-    .catch(err => {
-      res.render("404");
-    });
+  let goods = { products: products.getTheGoods };
+  res.render("products/index", goods);
 });
 
 module.exports = router;

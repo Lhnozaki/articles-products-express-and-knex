@@ -120,16 +120,9 @@ router.post("/fetch", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  knex
-    .select("*")
-    .from("articles")
-    .then(results => {
-      let goods = { articles: results };
-      res.render("articles/index", goods);
-    })
-    .catch(err => {
-      res.render("404");
-    });
+  articles.getUriTitle();
+  let goods = { articles: articles.getTheTea };
+  res.render("articles/index", goods);
 });
 
 module.exports = router;
