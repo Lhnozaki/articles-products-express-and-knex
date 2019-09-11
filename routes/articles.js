@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const articles = require("../db/articles");
+const knex = require("../database/index");
 articles.getUriTitle();
 
 let error = "";
@@ -12,13 +13,18 @@ router.get("/search", (req, res) => {
 });
 
 router.get("/delete", (req, res) => {
-  res.render("articles/delete", {
-    articles: articles.getTheTea(),
-    error: error,
-    success: success
-  });
-  error = "";
-  success = "";
+  knex("articles")
+    .returning()
+    .orderBy("id", "asc")
+    .then(results => {
+      res.render("articles/delete", {
+        articles: results,
+        error: error,
+        success: success
+      });
+      error = "";
+      success = "";
+    });
 });
 
 router.get("/new", (req, res) => {
@@ -27,101 +33,154 @@ router.get("/new", (req, res) => {
 });
 
 router.get("/edit", (req, res) => {
-  res.render("articles/edit", { articles: articles.getTheTea(), error: error });
-  error = "";
+  knex("articles")
+    .returning()
+    .orderBy("id", "asc")
+    .then(results => {
+      res.render("articles/edit", {
+        articles: results,
+        error: error
+      });
+      error = "";
+    });
 });
 
 router.put("/edit", (req, res) => {
-  if (req.body.title === "" || req.body.author === "" || req.body.body === "") {
-    res.redirect("/articles/edit");
-    error = "Please fill in all fields";
-  } else {
-    articles.editTheTea(
-      req.body.id,
-      req.body.title,
-      req.body.author,
-      req.body.body
-    );
-    let story = articles.filterTheTea(req.body.title);
-    console.log(articles.getTheTea());
-    res.render("articles/article", { articles: story });
-  }
+  knex("articles")
+    .where("title", req.body.id)
+    .update({
+      title: req.body.title,
+      author: req.body.author,
+      body: req.body.body,
+      url: encodeURI(req.body.title)
+    })
+    .returning("*")
+    .then(results => {
+      if (
+        req.body.title === "" ||
+        req.body.author === "" ||
+        req.body.body === ""
+      ) {
+        throw err;
+      } else {
+        res.render("articles/article", { articles: results });
+      }
+    })
+    .catch(err => {
+      error = "Please fill in all fields";
+      res.redirect("/articles/edit");
+    });
 });
 
 router.delete("/delete", (req, res) => {
   let story = req.body.title;
-  if (story === undefined || story === "") {
-    error = "Could not find the article.";
-    res.redirect("/articles/delete");
-  } else {
-    articles.deleteTheTea(story);
-    success = "Successfully deleted article";
-    res.redirect("/articles/delete");
-  }
+  knex("articles")
+    .where("title", story)
+    .del()
+    .then(results => {
+      if (results == 0) {
+        throw err;
+      } else {
+        success = "Successfully deleted article";
+        res.redirect("/articles/delete");
+      }
+    })
+    .catch(err => {
+      error = "Could not find the article.";
+      res.redirect("/articles/delete");
+    });
 });
 
 router.get("/delete/:id", (req, res) => {
-  let searchName = req.params.id;
-  let urlName = encodeURI(searchName);
-  let story = articles.filterTheTeaByUrl(urlName);
-  if (story === "" || story == false) {
-    res.render("articles/delete", {
-      error: "Could not find the article.",
-      articles: articles.getTheTea()
+  let story = encodeURI(req.params.id);
+  knex("articles")
+    .where("url", story)
+    .del()
+    .then(results => {
+      if (results == 0) {
+        throw err;
+      } else {
+        success = "Successfully deleted article";
+        res.redirect("/articles/delete");
+      }
+    })
+    .catch(err => {
+      error = "Could not find the article.";
+      res.redirect("/articles/delete");
     });
-  } else {
-    articles.deleteTheTea(urlName);
-    res.render("articles/delete", {
-      success: "Success!",
-      articles: articles.getTheTea()
-    });
-  }
 });
 
 router.get("/fetch", (req, res) => {
-  let searchName = req.query.articleName;
-  let story = articles.filterTheTea(searchName);
-
-  if (searchName === "" || story == false) {
-    error = "Could not find your article. Try again.";
-    res.redirect("search");
-  } else {
-    res.render("articles/article", { articles: story });
-  }
+  let story = req.query.articleName;
+  knex("articles")
+    .where("title", story)
+    .then(results => {
+      if (story === "" || results == 0) {
+        throw err;
+      } else {
+        res.render("articles/article", { articles: results });
+      }
+    })
+    .catch(err => {
+      error = "Could not find your article. Try again.";
+      res.redirect("search");
+    });
 });
 
 router.get("/:id", (req, res) => {
   let searchName = req.params.id;
-  let urlName = encodeURI(searchName);
-  let story = articles.filterTheTeaByUrl(urlName);
-
-  if (searchName === "" || story == false) {
-    res.render("articles/search", {
-      error: "Could not find your product. Try again."
+  let story = encodeURI(searchName);
+  knex("articles")
+    .where("url", story)
+    .then(results => {
+      if (story === "" || results == 0) {
+        throw err;
+      } else {
+        res.render("articles/article", { articles: results });
+      }
+    })
+    .catch(err => {
+      error = "Could not find your article. Try again.";
+      res.redirect("search");
     });
-  } else {
-    res.render("articles/article", { articles: story });
-  }
 });
 
 router.post("/fetch", (req, res) => {
   let story = req.body;
 
-  if (story.title !== "" && story.author !== "" && story.body !== "") {
-    let newStory = articles.addToTea(story.title, story.author, story.body);
-    let theStory = articles.filterTheTea(newStory.title);
-
-    res.render("articles/article", { articles: theStory });
-  } else {
-    error = "Please input all fields.";
-    res.redirect("new");
-  }
+  knex("articles")
+    .insert({
+      title: story.title,
+      author: story.author,
+      body: story.body,
+      url: encodeURI(story.title)
+    })
+    .returning("*")
+    .then(results => {
+      if (story.title === "" || story.author === "" || story.body === "") {
+        throw err;
+      } else {
+        res.render("articles/article", { articles: results });
+      }
+    })
+    .catch(err => {
+      error = "Please input all fields.";
+      res.redirect("new");
+    });
 });
 
 router.get("/", (req, res) => {
-  articles.getUriTitle();
-  let goods = { articles: articles.getTheTea };
-  res.render("articles/index", goods);
+  knex
+    .select("*")
+    .from("articles")
+    .orderBy("id", "asc")
+    .then(results => {
+      let goods = { articles: results };
+      res.render("articles/index", goods);
+    })
+    .catch(err => {
+      res.render("404");
+    });
 });
 
 module.exports = router;

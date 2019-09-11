@@ -18,7 +18,7 @@ app.use(methodOverride("_method"));
 
 // GET
 app.get("/", (req, res) => {
-  res.render("index");
+  res.status(200).render("index");
 });
 
 // Routers
@@ -26,8 +26,7 @@ app.use("/products", productRouter);
 app.use("/articles", articleRouter);
 
 app.get("*", (req, res) => {
-  res.status(404);
-  res.render("404");
+  res.status(404).render("404");
 });
 
 // Listen
