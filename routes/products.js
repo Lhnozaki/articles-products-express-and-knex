@@ -74,7 +74,6 @@ router.delete("/delete", (req, res) => {
     .where("id", itemID)
     .del()
     .then(results => {
-      console.log(results);
       if (itemID === "" || results == 0) {
         throw err;
       } else {
@@ -90,67 +89,101 @@ router.delete("/delete", (req, res) => {
 
 router.delete("/delete/:id", (req, res) => {
   let itemID = parseInt(req.params.id);
-  let goods = products.filterTheGoods(itemID);
 
-  if (itemID === "" || goods == false) {
-    error = "Could not find your product. Try again.";
-    res.redirect("/products/delete");
-  } else {
-    products.deleteTheGoods(itemID);
-    success = "Successfully Deleted!";
-    res.redirect("/products/delete");
-  }
+  knex("products")
+    .where("id", itemID)
+    .del()
+    .then(results => {
+      if (itemID === "" || results == 0) {
+        throw err;
+      } else {
+        success = "Successfully Deleted!";
+        res.redirect("/products/delete");
+      }
+    })
+    .catch(err => {
+      error = "Could not find your product. Try again.";
+      res.redirect("/products/delete");
+    });
 });
 
 router.get("/delete/:id", (req, res) => {
   let itemID = parseInt(req.params.id);
-  let goods = products.filterTheGoods(itemID);
 
-  if (itemID === "" || goods == false) {
-    error = "Could not find your product. Try again.";
-    res.redirect("/products/delete");
-  } else {
-    products.deleteTheGoods(itemID);
-    success = "Successfully Deleted!";
-    res.redirect("/products/delete");
-  }
+  knex("products")
+    .where("id", itemID)
+    .del()
+    .then(results => {
+      if (itemID === "" || results == 0) {
+        throw err;
+      } else {
+        success = "Successfully Deleted!";
+        res.redirect("/products/delete");
+      }
+    })
+    .catch(err => {
+      error = "Could not find your product. Try again.";
+      res.redirect("/products/delete");
+    });
 });
 
 router.get("/fetch", (req, res) => {
   let searchID = req.query.id;
-  let goods = products.filterTheGoods(searchID);
 
-  if (searchID === "" || goods == false) {
-    error = "Could not find your product. Try again.";
-    res.redirect("search");
-  } else {
-    res.render("products/product", { products: goods });
-  }
+  knex("products")
+    .where("id", searchID)
+    .then(results => {
+      if (searchID === "" || results == 0) {
+        throw err;
+      } else {
+        res.render("products/product", { products: results });
+      }
+    })
+    .catch(err => {
+      error = "Could not find your product. Try again.";
+      res.redirect("search");
+    });
 });
 
 router.get("/:id", (req, res) => {
   let searchID = req.params.id;
-  let goods = products.filterTheGoods(searchID);
 
-  if (searchID === "" || goods == false) {
-    error = "Could not find your product. Try again.";
-    res.redirect("search");
-  } else {
-    res.render("products/product", { products: goods });
-  }
+  knex("products")
+    .where("id", searchID)
+    .then(results => {
+      if (searchID === "" || results == 0) {
+        throw err;
+      } else {
+        res.render("products/product", { products: results });
+      }
+    })
+    .catch(err => {
+      error = "Could not find your product. Try again.";
+      res.redirect("search");
+    });
 });
 
 router.post("/new", (req, res) => {
   let item = req.body;
-  if (item.name !== "" && item.price !== "" && item.inventory !== "") {
-    let newItem = products.addToGoods(item.name, item.price, item.inventory);
-    let goods = products.filterTheGoods(newItem.id);
 
-    res.render("products/product", { products: goods });
-  } else {
-    error = "Please input all fields.";
-    res.redirect("new");
-  }
+  knex("products")
+    .insert({
+      name: item.name,
+      price: item.price,
+      inventory: item.inventory
+    })
+    .returning("*")
+    .then(results => {
+      if (item.name !== "" && item.price !== "" && item.inventory !== "") {
+        res.render("products/product", { products: results });
+      } else {
+        throw err;
+      }
+    })
+    .catch(err => {
+      error = "Please input all fields.";
+      res.redirect("new");
+    });
 });
 
 router.get("/", (req, res) => {

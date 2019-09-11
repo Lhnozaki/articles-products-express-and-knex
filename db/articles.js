@@ -14,10 +14,10 @@ let theTea = [
     url: ""
   },
   {
-    title: "Absolute Success is Luck. Relative Success is Hard Work.",
+    title: "Absolute Success is Luck. Relative Success is Hard Work",
     author: "James Clear",
     body:
-      "You can increase your surface area for good luck by taking action.  The forager who explores widely will find lots of useless terrain, but is also more likely to stumble across a bountiful berry patch than the person who stays home. Similarly, the person who works hard, pursues opportunity, and tries more things is more likely to stumble across a lucky break than the person who waits. Gary Player, the famous golfer and winner of nine major championships, has said, “The harder I practice, the luckier I get.”",
+      "You can increase your surface area for good luck by taking action.  The forager who explores widely will find lots of useless terrain, but is also more likely to stumble across a bountiful berry patch than the person who stays home. Similarly, the person who works hard, pursues opportunity, and tries more things is more likely to stumble across a lucky break than the person who waits. Gary Player, the famous golfer and winner of nine major championships, has said, 'The harder I practice, the luckier I get.'",
     url: ""
   }
 ];
